@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">HyperInfinityCube</string>
+    <string name="app_name">Hyper Infinity Cube</string>
+    <string name="switch_power">Power</string>
+    <string name="ledmode_dropdown_label">Mode:</string>
 </resources>
