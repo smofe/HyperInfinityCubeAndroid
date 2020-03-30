@@ -2,6 +2,8 @@ package com.michelklappert.hyperinfinitycube;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     PowerButton powerButton;
     Spinner ledmodeDropdown;
 
+    Fragment activeFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 dbMode.setValue(position);
+                setActiveMode(position);
             }
 
             @Override
@@ -73,13 +78,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ColorpickerFragment colorpickerFragment = new ColorpickerFragment();
-        colorpickerFragment.setDbColorRef(dbColor);
-        colorpickerFragment.setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,colorpickerFragment).commit();
 
 
 
 
+
+    }
+
+    private void setActiveMode(int id){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        switch (id){
+            case 0: {
+                activeFragment = new ColorpickerFragment();
+                ((ColorpickerFragment) activeFragment).setDbColorRef(dbColor);
+                break;
+            }
+            case 1: {
+                activeFragment = new FadingFragment();
+                break;
+            }
+            case 2: {
+                activeFragment = new EdgeSymmetryFragment();
+                break;
+            }
+            case 3: {
+                activeFragment = new RacingFragment();
+                break;
+            }
+        }
+        activeFragment.setArguments(getIntent().getExtras());
+        transaction.replace(R.id.fragment_container,activeFragment).commit();
     }
 }
