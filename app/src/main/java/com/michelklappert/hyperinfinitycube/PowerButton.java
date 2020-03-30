@@ -6,6 +6,10 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatImageButton;
 
+/*
+Simply an Image-Toggle-Button that changes its image based on its state
+ */
+
 public class PowerButton extends AppCompatImageButton {
 
     private boolean powerOn = false;

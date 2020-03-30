@@ -3,30 +3,27 @@ package com.michelklappert.hyperinfinitycube;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Switch;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.larswerkman.holocolorpicker.ColorPicker;
 
 public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference dbRef = database.getReference();
-    final DatabaseReference power = dbRef.child("power");
-    final DatabaseReference mode = dbRef.child("mode");
+    final DatabaseReference dbPower = dbRef.child("power");
+    final DatabaseReference dbMode = dbRef.child("mode");
+    final DatabaseReference dbColor = dbRef.child("color");
 
     PowerButton powerButton;
     Spinner ledmodeDropdown;
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 powerButton.toggleButton();
-                power.setValue(powerButton.getPowerOn());
+                dbPower.setValue(powerButton.getPowerOn());
             }
         });
 
@@ -53,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         ledmodeDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mode.setValue(position);
+                dbMode.setValue(position);
             }
 
             @Override
@@ -62,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        power.addValueEventListener(new ValueEventListener() {
+        dbPower.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Boolean value = dataSnapshot.getValue(Boolean.class);
@@ -75,6 +72,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("file","Failed to read value", databaseError.toException());
             }
         });
+
+        ColorpickerFragment colorpickerFragment = new ColorpickerFragment();
+        colorpickerFragment.setDbColorRef(dbColor);
+        colorpickerFragment.setArguments(getIntent().getExtras());
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,colorpickerFragment).commit();
+
+
 
 
     }
