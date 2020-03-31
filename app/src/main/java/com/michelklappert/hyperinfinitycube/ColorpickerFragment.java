@@ -29,7 +29,7 @@ public class ColorpickerFragment extends Fragment {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_colorpicker, null);
 
-        colorPicker = (ColorPicker) root.findViewById(R.id.colorpicker);
+        colorPicker = (ColorPicker) root.findViewById(R.id.color_Colorpicker);
         saturationBar = (SaturationBar) root.findViewById(R.id.saturationbar);
 
         colorPicker.addSaturationBar(saturationBar);

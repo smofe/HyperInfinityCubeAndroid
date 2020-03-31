@@ -14,7 +14,7 @@
             android:gravity="center">
 
             <com.larswerkman.holocolorpicker.ColorPicker
-                android:id="@+id/colorpicker"
+                android:id="@+id/color_Colorpicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
