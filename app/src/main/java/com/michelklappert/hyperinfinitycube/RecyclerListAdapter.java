@@ -59,6 +59,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         mItems.add(color);
     }
 
+    public List<Integer> getColors(){
+        return this.mItems;
+    }
+
     public static class ItemViewHolder extends RecyclerView.ViewHolder implements
             ItemTouchHelperViewHolder {
 

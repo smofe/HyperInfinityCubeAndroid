@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     final DatabaseReference dbPower = dbRef.child("power");
     final DatabaseReference dbMode = dbRef.child("mode");
     final DatabaseReference dbColor = dbRef.child("color");
+    final DatabaseReference dbFading = dbRef.child("fading");
 
     PowerButton powerButton;
     Spinner ledmodeDropdown;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case 1: {
-                activeFragment = new FadingFragment();
+                activeFragment = new FadingFragment(dbFading);
                 break;
             }
             case 2: {

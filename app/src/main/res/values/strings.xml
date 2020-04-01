@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Hyper Infinity Cube</string>
     <string name="switch_power">Power</string>
-    <string name="ledmode_dropdown_label">Mode:</string>
+    <string name="ledmode_dropdown_label">Mode: </string>
     <string name="fading_description">Choose the colors that the Cube interpolates in between</string>
     <string name="button_addColor">Add Color</string>
+    <string name="slider_speed">Speed: </string>
 </resources>
