@@ -2,7 +2,7 @@
 <resources>
     <string-array name="ledmodes_array">
         <item>Color</item>
-        <item>Uniform Fading</item>
+        <item>Fading</item>
         <item>Edge Symmetry</item>
         <item>Racing</item>
     </string-array>

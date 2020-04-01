@@ -8,8 +8,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/fading_description"
@@ -20,28 +21,25 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.9"
+            android:gravity="end"
             android:orientation="horizontal">
 
-            <com.larswerkman.holocolorpicker.ColorPicker
-                android:id="@+id/fading_colorpicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:drawingCacheQuality="high"
-                app:color_wheel_thickness="15dp" />
+            <FrameLayout
+                android:id="@+id/fading_colorPickerContainer"
+                android:layout_width="0dip"
+                android:layout_height="300dp"
+                android:layout_weight="0.75">
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            </FrameLayout>
 
-                <LinearLayout
-                    android:id="@+id/fading_buttonContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </ScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fading_selectedColorList"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:scrollbars="vertical" />
 
         </LinearLayout>
 
@@ -49,8 +47,15 @@
             android:id="@+id/fading_button_addColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.1"
             android:background="@color/colorAccent"
-            android:text="Add Color" />
+            android:text="@string/button_addColor" />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

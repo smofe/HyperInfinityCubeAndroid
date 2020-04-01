@@ -38,7 +38,7 @@ public class ColorpickerFragment extends Fragment {
         colorPicker.setOnColorChangedListener(new ColorPicker.OnColorChangedListener() {
             @Override
             public void onColorChanged(int color) {
-                dbColorRef.setValue(color);
+                if (dbColorRef != null) dbColorRef.setValue(color);
             }
         });
 
