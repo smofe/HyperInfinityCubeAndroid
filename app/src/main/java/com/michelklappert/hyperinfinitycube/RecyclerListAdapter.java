@@ -1,6 +1,8 @@
 package com.michelklappert.hyperinfinitycube;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         implements ItemTouchHelperAdapter {
 
     private final List<Integer> mItems = new ArrayList<>();
+    private View.OnClickListener onClickListener;
+
 
     public RecyclerListAdapter() {
 
@@ -29,7 +33,9 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     @NonNull
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main, parent, false);
+        view.setOnClickListener(onClickListener);
         return new ItemViewHolder(view);
+
     }
 
     @Override
@@ -63,6 +69,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         return this.mItems;
     }
 
+    public void setOnClickListener(View.OnClickListener listener){
+        this.onClickListener = listener;
+    }
+
     public static class ItemViewHolder extends RecyclerView.ViewHolder implements
             ItemTouchHelperViewHolder {
 
@@ -82,5 +92,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         public void onItemClear() {
             itemView.setBackgroundColor(0);
         }
+
     }
 }

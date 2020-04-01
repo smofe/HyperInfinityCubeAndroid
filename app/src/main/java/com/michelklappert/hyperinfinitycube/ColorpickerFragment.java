@@ -57,4 +57,8 @@ public class ColorpickerFragment extends Fragment {
         return this.dbColorRef;
     }
 
+    public void setSelectedColor(int color){
+        colorPicker.setColor(color);
+    }
+
 }

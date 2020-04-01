@@ -1,6 +1,9 @@
 package com.michelklappert.hyperinfinitycube;
 
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +12,24 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.michelklappert.hyperinfinitycube.helper.SimpleItemTouchHelperCallback;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class FadingFragment extends Fragment {
 
@@ -34,6 +43,8 @@ public class FadingFragment extends Fragment {
     private SeekBar speedSlider;
 
     private ItemTouchHelper itemTouchHelper;
+
+    private Button activeColor;
 
 
     public FadingFragment(DatabaseReference dbRef){
@@ -114,6 +125,25 @@ public class FadingFragment extends Fragment {
             }
         });
 
+        /* Load existing color configuration from Firebase DB */
+        dbColors.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Iterator<DataSnapshot> it = dataSnapshot.getChildren().iterator();
+                while (it.hasNext()){
+                    adapter.addItem(it.next().getValue(Integer.class));
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         /* Observe item changes to update the color database */
         RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
             @Override
@@ -136,6 +166,20 @@ public class FadingFragment extends Fragment {
         };
         adapter.registerAdapterDataObserver(observer);
 
+        adapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button button = (Button) v;
+                int color = ((ColorDrawable) button.getBackground()).getColor();
+                colorPicker.setSelectedColor(color);
+                if (activeColor != null && activeColor.equals(button)) {
+                    activeColor = null;
+                }
+                else {
+                    activeColor = button;
+                }
+            }
+        });
     }
 
     public void setDbRef(DatabaseReference ref) throws Exception {
