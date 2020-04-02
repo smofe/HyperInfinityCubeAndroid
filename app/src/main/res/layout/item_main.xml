@@ -3,5 +3,9 @@
     android:id="@+id/text"
     android:layout_width="match_parent"
     android:layout_height="?listPreferredItemHeight"
-    android:gravity="center_vertical"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:layout_margin="0dp"
+    android:ellipsize="none"
+    android:gravity="center_horizontal|center_vertical"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:textSize="22sp"
+    android:textStyle="bold" />

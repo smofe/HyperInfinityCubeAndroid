@@ -10,6 +10,10 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.database.DatabaseReference;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.SaturationBar;
+import com.michelklappert.hyperinfinitycube.helper.ColorObserver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
     Colorpicker Fragment based on the Android Holo Colorpicker: https://github.com/LarsWerkman/HoloColorPicker
@@ -21,6 +25,8 @@ public class ColorpickerFragment extends Fragment {
     private SaturationBar saturationBar;
 
     private DatabaseReference dbColorRef;
+
+    private List<ColorObserver> observerList;
 
 
     @Override
@@ -39,6 +45,9 @@ public class ColorpickerFragment extends Fragment {
             @Override
             public void onColorChanged(int color) {
                 if (dbColorRef != null) dbColorRef.setValue(color);
+                for (int i=0; i < observerList.size(); i++){
+                    observerList.get(i).update(color);
+                }
             }
         });
 
@@ -59,6 +68,11 @@ public class ColorpickerFragment extends Fragment {
 
     public void setSelectedColor(int color){
         colorPicker.setColor(color);
+    }
+
+    public void attachColorChangeObserver(ColorObserver o){
+        if (observerList == null) observerList = new ArrayList<ColorObserver>();
+        observerList.add(o);
     }
 
 }

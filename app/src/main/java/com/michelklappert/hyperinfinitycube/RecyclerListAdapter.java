@@ -1,13 +1,10 @@
 package com.michelklappert.hyperinfinitycube;
 
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +18,7 @@ import java.util.List;
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>
         implements ItemTouchHelperAdapter {
 
-    private final List<Integer> mItems = new ArrayList<>();
+    private List<Integer> mItems = new ArrayList<>();
     private View.OnClickListener onClickListener;
 
 
@@ -71,6 +68,11 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     public void setOnClickListener(View.OnClickListener listener){
         this.onClickListener = listener;
+    }
+
+    public void setItemList(List<Integer> list){
+        this.mItems = list;
+        notifyDataSetChanged();
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder implements

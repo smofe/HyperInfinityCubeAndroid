@@ -3,16 +3,13 @@ package com.michelklappert.hyperinfinitycube;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,18 +17,18 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.larswerkman.holocolorpicker.ColorPicker;
+import com.michelklappert.hyperinfinitycube.helper.ColorObserver;
 import com.michelklappert.hyperinfinitycube.helper.SimpleItemTouchHelperCallback;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-public class FadingFragment extends Fragment {
+public class FadingFragment extends Fragment implements ColorObserver {
 
     private DatabaseReference dbRef;
     private DatabaseReference dbColors;
@@ -43,6 +40,7 @@ public class FadingFragment extends Fragment {
     private SeekBar speedSlider;
 
     private ItemTouchHelper itemTouchHelper;
+    private RecyclerListAdapter adapter;
 
     private Button activeColor;
 
@@ -104,7 +102,7 @@ public class FadingFragment extends Fragment {
         transaction.replace(R.id.fading_colorPickerContainer,colorPicker).commit();
 
         /* Load the RecyclerView for displaying all selected colors */
-        final RecyclerListAdapter adapter = new RecyclerListAdapter();
+        adapter = new RecyclerListAdapter();
         selectedColors = (RecyclerView) root.findViewById(R.id.fading_selectedColorList);
         selectedColors.setHasFixedSize(false);
         selectedColors.setAdapter(adapter);
@@ -120,8 +118,13 @@ public class FadingFragment extends Fragment {
         addColorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.addItem(colorPicker.getColor());
-                adapter.notifyDataSetChanged();
+                List<Integer> colors = new ArrayList<Integer>();
+                for (int i=0; i < selectedColors.getChildCount(); i++){
+                    colors.add(((ColorDrawable)selectedColors.getChildAt(i).getBackground()).getColor());
+                }
+                colors.add(colorPicker.getColor());
+                adapter.setItemList(colors);
+                resetActiveColor();
             }
         });
 
@@ -167,19 +170,25 @@ public class FadingFragment extends Fragment {
         adapter.registerAdapterDataObserver(observer);
 
         adapter.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 Button button = (Button) v;
                 int color = ((ColorDrawable) button.getBackground()).getColor();
-                colorPicker.setSelectedColor(color);
                 if (activeColor != null && activeColor.equals(button)) {
-                    activeColor = null;
+                    resetActiveColor();
                 }
                 else {
+                    resetActiveColor();
                     activeColor = button;
+                    activeColor.setText("EDIT");
                 }
+                colorPicker.setSelectedColor(color);
             }
         });
+
+        colorPicker.attachColorChangeObserver(this);
+
     }
 
     public void setDbRef(DatabaseReference ref) throws Exception {
@@ -191,6 +200,29 @@ public class FadingFragment extends Fragment {
             throw new Exception("DatabaseReference is null");
         }
     }
+
+    @Override
+    public void update(int color) {
+        if (activeColor != null) {
+            activeColor.setBackgroundColor(color);
+
+            //TODO: This seems pretty bad performance wise, but works for now.
+            List<Integer> colors = new ArrayList<Integer>();
+            for (int i=0; i < selectedColors.getChildCount(); i++){
+                colors.add(((ColorDrawable)selectedColors.getChildAt(i).getBackground()).getColor());
+            }
+            adapter.setItemList(colors);
+
+        }
+    }
+
+    private void resetActiveColor(){
+        if (activeColor != null){
+            activeColor.setText("");
+            activeColor = null;
+        }
+    }
 }
+
 
 
